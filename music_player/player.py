@@ -4,16 +4,24 @@ import os
 
 class MusicPlayer:
     def __init__(self):
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+
         self.tracks = [
-            os.path.join("music", "track1.wav"),
-            os.path.join("music", "track2.wav")
+            os.path.join(base_dir, "music", "sample_tracks", "track1.mp3"),
+            os.path.join(base_dir, "music", "sample_tracks", "track2.mp3")
         ]
+
         self.current_index = 0
         self.is_playing = False
         self.font = pygame.font.SysFont("Arial", 32)
 
     def load_current_track(self):
-        pygame.mixer.music.load(self.tracks[self.current_index])
+        track_path = self.tracks[self.current_index]
+
+        if not os.path.exists(track_path):
+            raise FileNotFoundError(f"Music file not found: {track_path}")
+
+        pygame.mixer.music.load(track_path)
 
     def play(self):
         self.load_current_track()
